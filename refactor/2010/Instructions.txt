@@ -1,0 +1,9 @@
+The project is a simple ordering system that allows someone to order as specified quantity of items from a list.
+
+The purpose of this excercise is to evaluate a general knowlege of Asp.Net MVC skills and good coding practices. 
+
+This project was poorly coded. It has a lot of issue with maintainablility and violates several of the SOLID Principals. Feel free to refactor it however you see fit into code that you would be proud to show. If you have any tools that will help you such as JQuery, StructureMap, Resharper, etc. Feel free to use those as well.
+
+There is no need to add functionality to make this project complete. Such as deleting items you add to your order. This is purely a refactoring excercise. 
+
+Come prepared to have a friendly and fun conversation with other developers about what you did to refactor the product and why you chose to do it that way.
