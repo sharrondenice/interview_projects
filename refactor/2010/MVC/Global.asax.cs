@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Domain;
 
 namespace MVC
 {
@@ -35,6 +36,9 @@ namespace MVC
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
+
+            //1 order repository for the entire project
+            Application["order_repository"] = new OrderRepository();
         }
     }
 }
