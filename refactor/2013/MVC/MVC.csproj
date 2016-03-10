@@ -154,6 +154,7 @@
     <Content Include="Content\yellowing\images\img07.gif" />
     <Content Include="Content\yellowing\images\img08.jpg" />
     <Content Include="Content\yellowing\images\img09.jpg" />
+    <Content Include="Content\yellowing\images\loading.gif" />
     <Content Include="Content\yellowing\index.html" />
     <Content Include="Content\yellowing\license.txt" />
     <Content Include="Content\yellowing\style.css" />

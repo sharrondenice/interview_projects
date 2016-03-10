@@ -217,9 +217,7 @@ img.aligncenter {
 /* Content */
 
 #content {
-	float: left;
-	width: 540px;
-	padding: 30px 20px 0px 0px;
+	padding: 60px 20px 0px 0px;
 }
 
 .post {
@@ -267,9 +265,7 @@ img.aligncenter {
 /* Sidebar */
 
 #sidebar {
-	float: right;
-	width: 330px;
-	padding: 40px 0px 0px 0px;
+	padding: 70px 0px 0px 0px;
 }
 
 #sidebar ul {
@@ -367,4 +363,51 @@ img.aligncenter {
 }
 
 #footer a {
+}
+
+h1, h2, h3, h4, h5 {
+    font-size: 30px;
+    padding: 10px 0px !important;
+    text-transform: capitalize;
+}
+
+.cart .cart-container {
+    padding: 30px 10px 0px 10px;
+    font-size: 11px;
+    border-radius: 5px;
+    box-shadow: 5px 5px 5px #D6D6D6;
+
+    background: #fcf8e3; /* Old browsers */
+    background: -moz-linear-gradient(top,  #fcf8e3 0%, #f9eba2 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top,  #fcf8e3 0%,#f9eba2 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom,  #fcf8e3 0%,#f9eba2 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcf8e3', endColorstr='#f9eba2',GradientType=0 ); /* IE6-9 */
+}
+
+.cart h1 {
+    font-size: 22px;
+    text-transform: uppercase !important;
+}
+.cart .header {
+    background: white;
+}
+.cart button {
+    font-size: 11px;
+}
+#sidebar.cart {
+    padding: 70px 10px 0px 0px !important;
+}
+#error {
+    border-radius: 10px;
+    padding: 10px 30px 20px 30px;
+}
+#error h1 {
+    font-size: 20px;
+    font-weight: bold;
+}
+.row-color {
+    background: #FFF;
+}
+.alt-row-color {
+    background: #F7F7F7;
 }

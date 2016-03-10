@@ -1,71 +1,76 @@
 ﻿@{
-    ViewBag.Title = "Index";
-    ViewBag.app = "ShoppingCart";
-    ViewBag.js = "app.cart.js";
+    Page.Title = "Order";
+    Page.app = "ShoppingCart";
+    Page.js = "app.cart.js";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div id="content">
+<div class="row table-responsive">
     <form id="mainForm" name="mainForm" ng-controller="CartController" data-ng-init="GetProducts()">
-        <div ng-show="OrderComplete == false">
-            <h1>Items available to purchase</h1>
-            <table width="100%">
-                <tr>
+        <div id="content" class="col-xs-12 col-md-8" ng-show="!OrderComplete">
+            <div id="error" class="bg-danger" ng-show="Error">
+                <h1>Error Occurred (#{{ ErrorNo }})</h1>
+                An unknown error occurred. Please try refreshing your page. If the message persists, contact your system administrator.
+            </div>
+            <h1 ng-show="!Error">Items available to purchase</h1>
+            <table class="table" width="100%" ng-show="!Error">
+                <tr class="header">
                     <th align="left" ng-repeat="header in ProductHeaders">
                         {{header}}
                     </th>
                 </tr>
-                <tr ng-repeat="(index, product) in Products">
+                <tr ng-repeat="(index, product) in Products" ng-class-odd="'row-color'" ng-class-even="'alt-row-color'">
                     <td >{{product.description}}</td>
                     <td >{{product.price | currency:"$":2}}</td>
-                    <td ><input type="number" name="quantity" ng-model="Products[index].quantity" ng-init="Products[index].quantity=1" style="width: 50px;" required/></td>
-                </tr>
-                <tr>
-                    <td colspan="3"></td>
+                    <td ><input type="number" min="0" max="99" class="form-control" ng-model="Products[index].quantity" ng-init="Products[index].quantity=1" style="width: 60px;" required/></td>
                 </tr>
 			    <tr>
-                    <td></td>
-                    <td></td>
-				    <td><button ng-click="AddProducts()" ng-disabled="mainForm.$invalid">Add to Order</button></td>
+				    <td colspan="3" align="right">
+                        <button type="button" class="btn btn-primary" ng-click="AddProducts()" ng-disabled="mainForm.$invalid">Add to Order</button>
+				    </td>
 			    </tr>
             </table>
         </div>
 
-        <div ng-show="CartEmpty == false && OrderComplete == false">
-            <h1>Items to Order</h1>
-            <table width="100%">
-                <tr>
-                    <th align="left" ng-repeat="header in CartHeaders">
-                        {{header}}
-                    </th>
-                </tr>
-                <tr ng-repeat="item in CartItems">
-                    <td >{{item.description}}</td>
-                    <td >{{item.price | currency:"$":2}}</td>
-                    <td >{{item.quantity}}</td>
-                    <td >{{item.total | currency:"$":2}}</td>
-                </tr>
-                <tr>
-                    <td colspan="4"></td>
-                </tr>
-			    <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-				    <td style="border-top: 1px solid #CCC; padding: 10px 0px;">{{CartTotal | currency:"$":2}} <strong>Total</strong></td>
-			    </tr>
-			    <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-				    <td><button ng-click="CheckOut()" ng-disabled="mainForm.$invalid">Check Out</button> <button ng-click="EmptyCart()">Empty Cart</button></td>
-			    </tr>
-            </table>
-        </div>
-
-        <div ng-show="OrderComplete == true">
+        <div id="content" class="col-xs-12 col-md-8" ng-show="OrderComplete">
             <h1>Thank You</h1>
-            Thank you for your order and email has been sent with details of your order.         
-            Your order number is {{OrderID}}
+            Thank you for your order and email has been sent with details of your order.<br />         
+            Your order number is <strong>{{OrderID}}</strong>
+        </div>
+
+        <div id="sidebar" class="col-xs-6 col-md-4 cart">
+            <h1><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>Cart</h1>
+            <div class="cart-container">
+                <table class="table" width="100%" ng-show="!CartEmpty && !OrderComplete">
+                    <tr class="header">
+                        <th align="left" ng-repeat="header in CartHeaders">
+                            {{header}}
+                        </th>
+                    </tr>
+                    <tr ng-repeat="item in CartItems">
+                        <td >{{item.description}}</td>
+                        <td >{{item.price | currency:"$":2}} x {{item.quantity}}</td>
+                        <td >{{item.total | currency:"$":2}}</td>
+                    </tr>
+			        <tr>
+				        <td colspan="3" align="right" style="border-top: 1px solid #CCC; padding: 10px 0px;">{{CartTotal | currency:"$":2}} <strong>Total</strong></td>
+			        </tr>
+			        <tr>
+				        <td colspan="3" align="right">
+                            <button type="button" class="btn btn-success" ng-click="CheckOut()" ng-disabled="mainForm.$invalid">Check Out</button>
+                            <button type="button" class="btn btn-danger" ng-click="EmptyCart()">Empty Cart</button>
+				        </td>
+			        </tr>
+                </table>
+                <table class="table" width="100%" ng-show="CartEmpty">
+                     <tr>
+                         <td>0 Items</td>
+                     </tr>
+                </table>
+            </div>
+
+            <div id="Loader" ng-show="Loading">
+                <img src="@Url.Content("~/Content/yellowing/images/loading.gif")" width="50" class="img-responsive center-block" />
+            </div>
         </div>
     </form>
 </div>

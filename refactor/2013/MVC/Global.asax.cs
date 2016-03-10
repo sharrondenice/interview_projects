@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using MVC.Models;
 
 namespace MVC
 {
@@ -37,7 +38,7 @@ namespace MVC
             RegisterRoutes(RouteTable.Routes);
 
             //1 order repository for the entire project
-            Application["order_repository"] = new Models.OrderRepository();
+            Application["order_repository"] = new OrderRepository();
         }
     }
 }

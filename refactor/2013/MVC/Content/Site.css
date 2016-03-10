@@ -1,7 +1,7 @@
 body
 {
     font-size: .85em;
-    font-family: "Trebuchet MS", Verdana, Helvetica, Sans-Serif;
+    font-family: Arial, Verdana, Sans-Serif !important;
     color: #232323;
     background-color: #fff;
 }
@@ -72,8 +72,4 @@ input.ng-invalid,
 .validation-summary-valid
 {
     display: none;
-}
-
-h1, h2, h3, h4, h5 {
-    padding: 10px 0px !important;
 }

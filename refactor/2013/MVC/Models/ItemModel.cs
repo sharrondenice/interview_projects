@@ -5,6 +5,9 @@ using System.Web;
 
 namespace MVC.Models
 {
+	/// <summary>
+	/// Item model.
+	/// </summary>
     public class ItemModel
     {
         public long id { get; set; }
@@ -12,8 +15,15 @@ namespace MVC.Models
         public decimal price { get; set; }
     }
 
+	/// <summary>
+	/// Item.
+	/// </summary>
     public class Item
     {
+		/// <summary>
+		/// Loads the items.
+		/// </summary>
+		/// <returns>The items.</returns>
         public static List<ItemModel> LoadItems()
         {
             List<ItemModel> _itemList = new List<ItemModel>();

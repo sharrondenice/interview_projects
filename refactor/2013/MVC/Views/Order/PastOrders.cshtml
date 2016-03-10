@@ -1,22 +1,26 @@
 ﻿@{
-    ViewBag.Title = "Past Orders";
-    ViewBag.app = "OrderRepository";
-    ViewBag.js = "app.orders.js";
+    Page.Title = "Past Orders";
+    Page.app = "OrderRepository";
+    Page.js = "app.orders.js";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div id="content">
+<div id="content" class="table-responsive">
+    <div id="error" class="bg-danger" ng-show="Error">
+        <h1>Error Occurred (#{{ ErrorNo }})</h1>
+        An unknown error occurred. Please try refreshing your page. If the message persists, contact your system administrator.
+    </div>
     <form id="mainForm" name="mainForm" ng-controller="OrderController" data-ng-init="GetOrders()">
-        <table width="100%" ng-show="Orders.length > 0">
+        <table class="table" width="100%" ng-show="!Error && Orders.length > 0">
             <tr>
-                    <th align="left" ng-repeat="header in OrderHeaders">
+                <th align="left" ng-repeat="header in OrderHeaders">
                     {{ header }}
                 </th>
             </tr>
-            <tr ng-repeat="(index, order) in Orders">
+            <tr ng-repeat="(index, order) in Orders" ng-class-odd="'row-color'" ng-class-even="'alt-row-color'">
                 <td >{{ order.id }}</td>
-                <td >{{ GetTotalItems(index) }}</td>
-                <td >{{ GetOrderTotal(index) | currency:"$":2 }}</td>
+                <td >{{ CalculateTotalItems(index) }}</td>
+                <td >{{ CalculateOrderTotal(index) | currency:"$":2 }}</td>
             </tr>
         </table>
         <div ng-show="Orders.length == 0">No Orders Found</div>
