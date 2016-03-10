@@ -4,8 +4,7 @@ using System.Linq;
 using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
-using Domain;
-using MVC.Models.Order;
+using MVC.Models;
 
 namespace MVC.Controllers
 {
@@ -13,14 +12,7 @@ namespace MVC.Controllers
     {
         public ActionResult Index()
         {
-            var items = new List<Item>()
-                            {
-                                new Item(){description = "Red Stapler",price = 50, id = 1},
-                                new Item(){description = "TPS Report", price = 3, id = 2},
-                                new Item(){description = "Printer", price = 400, id = 3},
-                                new Item(){description = "Baseball bat", price = 80, id = 4},
-                                new Item(){description = "Michael Bolton CD", price = 12, id = 5}
-                            };
+            var items = Item.LoadItems();
 
             ViewData["items"] = items;
             Session["order_items"] = new List<OrderItemModel>();
@@ -30,16 +22,11 @@ namespace MVC.Controllers
 
         public ActionResult ViewPastOrders()
         {
-            var order_repository = (OrderRepository)System.Web.HttpContext.Current.Application["order_repository"];
-            var orders = order_repository.get_all();
-
-            ViewData["orders"] = orders;
-
             return View("PastOrders");
         }
 
         [HttpPost]
-        public ActionResult Save(IList<OrderItemModel> order_items)
+        public JsonResult Save(IList<OrderItemModel> order_items)
         {
             //Save Order
             var order_repository = (OrderRepository)System.Web.HttpContext.Current.Application["order_repository"];
@@ -72,69 +59,19 @@ namespace MVC.Controllers
             return Json(order, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpPost]
-        public ActionResult AddToOrder(FormCollection form_collection)
+        [HttpGet]
+        public JsonResult GetOrders()
         {
-            var items = new List<Item>()
-                            {
-                                new Item(){description = "Red Stapler",price = 50, id = 1},
-                                new Item(){description = "TPS Report", price = 3, id = 2},
-                                new Item(){description = "Printer", price = 400, id = 3},
-                                new Item(){description = "Baseball bat", price = 80, id = 4},
-                                new Item(){description = "Michael Bolton CD", price = 12, id = 5}
-                            };
+            var order_repository = (OrderRepository)System.Web.HttpContext.Current.Application["order_repository"];
+            var orders = order_repository.get_all();
 
-            ViewData["items"] = items;
-
-            IList<OrderItemModel> order_items = (IList<OrderItemModel>)Session["order_items"];
-            if (order_items == null)
-            {
-                order_items = new List<OrderItemModel>();
-            }
-
-            int item_id = 0;
-            int item_quantity = 0;
-
-            foreach (var key in form_collection.Keys)
-            {
-                if (key.ToString().StartsWith("item_id"))
-                {
-                    item_id = int.Parse(form_collection[key.ToString()]);
-                }
-
-                if (key.ToString().StartsWith("item_quantity"))
-                {
-                    item_quantity = int.Parse(form_collection[key.ToString()]);
-                }
-            }
-
-            var item = items.First(x => x.id == item_id);
-            var order_item = new OrderItemModel
-                                    {
-                                        id=item.id,
-                                        price=item.price,
-                                        description = item.description,
-                                        quantity = item_quantity
-                                    };
-
-            order_items.Add(order_item);
-
-            Session["order_items"] = order_items;
-
-            return View("Index");
+            return Json(orders, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
         public JsonResult GetProducts()
         {
-            var items = new List<Item>()
-			{
-				new Item(){description = "Red Stapler",price = 50, id = 1},
-				new Item(){description = "TPS Report", price = 3, id = 2},
-				new Item(){description = "Printer", price = 400, id = 3},
-				new Item(){description = "Baseball bat", price = 80, id = 4},
-				new Item(){description = "Michael Bolton CD", price = 12, id = 5}
-			};
+            var items = Item.LoadItems();
 
             return Json(items, JsonRequestBehavior.AllowGet);
         }

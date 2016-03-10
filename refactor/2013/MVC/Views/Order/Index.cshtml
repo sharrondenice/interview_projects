@@ -1,102 +1,71 @@
-﻿@using System.Collections
-@using Domain
-@using MVC.Models.Order
-<!DOCTYPE html>
-
-<html>
-<head>
-    <link href="../../Content/yellowing/style.css" rel="stylesheet" type="text/css" />
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
-    <script src="../../Scripts/angular-cookies.min.js"></script>
-    <script src="../../Scripts/app.cart.js"></script>
-    <title>Index</title>
-</head>
-<body ng-app="ShoppingCart">
-    <div id="wrapper">
-	    <div id="header">
-		    <div id="logo">
-			    <h1>Ordering System</h1>
-		    </div>
+﻿@{
+    ViewBag.Title = "Index";
+    ViewBag.app = "ShoppingCart";
+    ViewBag.js = "app.cart.js";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div id="content">
+    <form id="mainForm" name="mainForm" ng-controller="CartController" data-ng-init="GetProducts()">
+        <div ng-show="OrderComplete == false">
+            <h1>Items available to purchase</h1>
+            <table width="100%">
+                <tr>
+                    <th align="left" ng-repeat="header in ProductHeaders">
+                        {{header}}
+                    </th>
+                </tr>
+                <tr ng-repeat="(index, product) in Products">
+                    <td >{{product.description}}</td>
+                    <td >{{product.price | currency:"$":2}}</td>
+                    <td ><input type="number" name="quantity" ng-model="Products[index].quantity" ng-init="Products[index].quantity=1" style="width: 50px;" required/></td>
+                </tr>
+                <tr>
+                    <td colspan="3"></td>
+                </tr>
+			    <tr>
+                    <td></td>
+                    <td></td>
+				    <td><button ng-click="AddProducts()" ng-disabled="mainForm.$invalid">Add to Order</button></td>
+			    </tr>
+            </table>
         </div>
 
-	    <div id="page">
-		    <div id="page-bgtop">
-			    <div id="page-bgbtm">
-				    <div id="menu">
-					    <ul>
-						    <li><a href="@Url.Action("Index","Home")">Home</a></li>
-                            <li class="current_page_item"><a href="@Url.Action("Index","Order")">Order</a></li>
-                            <li><a href="@Url.Action("ViewPastOrders","Order")">Past Orders</a></li>
-					    </ul>
-				    </div>
-
-				    <div id="content" ng-controller="CartController" data-ng-init="GetProducts()">
-                        <div>
-                            <h1>Items available to purchase</h1>
-                            <table width="100%">
-                                <tr>
-                                    <th align="left" ng-repeat="header in ProductHeaders">
-                                        {{header}}
-                                    </th>
-                                </tr>
-                                <tr ng-repeat="(index, product) in Products">
-                                	<td >{{product.description}}</td>
-                                	<td >{{product.price | currency:"$":2}}</td>
-                                	<td ><input type="text" ng-model="Products[index].quantity" ng-init="Products[index].quantity=1" style="width: 50px;"/></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="3"></td>
-                                </tr>
-								<tr>
-                                    <td></td>
-                                    <td></td>
-									<td><input type="submit" value="Add to Order" ng-click="AddProducts()"/></td>
-								</tr>
-                            </table>
-                        </div>
-
-                        <p></p>
-
-                            <div ng-show="CartEmpty == false">
-                               <h1>Items to Order</h1>
-                                <table width="100%">
-                                    <tr>
-                                        <th align="left" ng-repeat="header in CartHeaders">
-                                            {{header}}
-                                        </th>
-                                    </tr>
-                                    <tr ng-repeat="item in CartItems">
-                                	    <td >{{item.description}}</td>
-                                	    <td >{{item.price | currency:"$":2}}</td>
-                                	    <td >{{item.quantity}}</td>
-                                	    <td >{{item.total | currency:"$":2}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="4"></td>
-                                    </tr>
-								    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-									    <td style="border-top: 1px solid #CCC; padding: 10px 0px;">{{CartTotal | currency:"$":2}} <strong>Total</strong></td>
-								    </tr>
-								    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-									    <td><button ng-click="CheckOut()">Check Out</button> <button ng-click="EmptyCart()">Empty Cart</button></td>
-								    </tr>
-                                </table>
-                            </div>
-
-                            <div ng-show="OrderComplete == true">
-                                Thank you for your order and email has been sent with details of your order.         
-                                Your order number is {{OrderID}}
-                            </div>
-                    </div>
-                </div>
-            </div>
+        <div ng-show="CartEmpty == false && OrderComplete == false">
+            <h1>Items to Order</h1>
+            <table width="100%">
+                <tr>
+                    <th align="left" ng-repeat="header in CartHeaders">
+                        {{header}}
+                    </th>
+                </tr>
+                <tr ng-repeat="item in CartItems">
+                    <td >{{item.description}}</td>
+                    <td >{{item.price | currency:"$":2}}</td>
+                    <td >{{item.quantity}}</td>
+                    <td >{{item.total | currency:"$":2}}</td>
+                </tr>
+                <tr>
+                    <td colspan="4"></td>
+                </tr>
+			    <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+				    <td style="border-top: 1px solid #CCC; padding: 10px 0px;">{{CartTotal | currency:"$":2}} <strong>Total</strong></td>
+			    </tr>
+			    <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+				    <td><button ng-click="CheckOut()" ng-disabled="mainForm.$invalid">Check Out</button> <button ng-click="EmptyCart()">Empty Cart</button></td>
+			    </tr>
+            </table>
         </div>
-	</div>
-</body>
-</html>
+
+        <div ng-show="OrderComplete == true">
+            <h1>Thank You</h1>
+            Thank you for your order and email has been sent with details of your order.         
+            Your order number is {{OrderID}}
+        </div>
+    </form>
+</div>

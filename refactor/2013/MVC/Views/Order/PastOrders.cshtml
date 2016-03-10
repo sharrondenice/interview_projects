@@ -1,51 +1,24 @@
-﻿@using Domain
-<!DOCTYPE html>
+﻿@{
+    ViewBag.Title = "Past Orders";
+    ViewBag.app = "OrderRepository";
+    ViewBag.js = "app.orders.js";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
-<html>
-    <head>
-        <link href="../../Content/yellowing/style.css" rel="stylesheet" type="text/css" />
-
-        <title>Past Orders</title>
-    </head>
-    <body>
-        <div id="wrapper">
-	        <div id="header">
-		        <div id="logo">
-			        <h1>Ordering System</h1>
-		        </div>
-	        </div>
-
-	        <div id="page">
-		        <div id="page-bgtop">
-			        <div id="page-bgbtm">
-				        <div id="menu">
-					        <ul>
-						        <li><a href="@Url.Action("Index","Home")">Home</a></li>
-                                <li><a href="@Url.Action("Index","Order")">Order</a></li>
-                                <li class="current_page_item"><a href="@Url.Action("ViewPastOrders","Order")">Past Orders</a></li>
-					        </ul>
-				        </div>
-
-				        <div id="content">
-                            <table width="100%">
-                                <tr>
-                                    <th align="left">Order</th>
-                                    <th align="left">Number of Items</th>
-                                    <th align="left">Total</th>
-                                </tr>
-                                @foreach (var order in (IList<Order>)ViewData["orders"])
-                                {
-                                    <tr>
-                                        <td>@order.id</td>
-                                        <td>@String.Format("{0}",order.items.Sum(x=>x.quantity))</td>
-                                        <td>@String.Format("{0:C}",order.items.Sum(x=>x.quantity * x.price))</td>
-                                    </tr>
-                                }
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </body>
-</html>
+<div id="content">
+    <form id="mainForm" name="mainForm" ng-controller="OrderController" data-ng-init="GetOrders()">
+        <table width="100%" ng-show="Orders.length > 0">
+            <tr>
+                    <th align="left" ng-repeat="header in OrderHeaders">
+                    {{ header }}
+                </th>
+            </tr>
+            <tr ng-repeat="(index, order) in Orders">
+                <td >{{ order.id }}</td>
+                <td >{{ GetTotalItems(index) }}</td>
+                <td >{{ GetOrderTotal(index) | currency:"$":2 }}</td>
+            </tr>
+        </table>
+        <div ng-show="Orders.length == 0">No Orders Found</div>
+    </form>
+</div>
