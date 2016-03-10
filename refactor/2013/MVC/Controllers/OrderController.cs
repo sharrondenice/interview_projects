@@ -39,16 +39,15 @@ namespace MVC.Controllers
         }
 
         [HttpPost]
-        public ActionResult Save(FormCollection form_collection)
+        public ActionResult Save(IList<OrderItemModel> order_items)
         {
             //Save Order
             var order_repository = (OrderRepository)System.Web.HttpContext.Current.Application["order_repository"];
-            var order_items = (IList<OrderItemModel>)Session["order_items"];
             var order = new Order();
 
             foreach (var order_item in order_items)
             {
-                var item = new OrderItem {item_id = order_item.item_id, quantity = order_item.quantity, price = order_item.price};
+                var item = new OrderItem {id = order_item.id, quantity = order_item.quantity, price = order_item.price};
                 order.items.Add(item);
             }
 
@@ -70,7 +69,7 @@ namespace MVC.Controllers
             }
 
             ViewData["order"] = order;
-            return View("ThankYou");
+            return Json(order, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -112,7 +111,7 @@ namespace MVC.Controllers
             var item = items.First(x => x.id == item_id);
             var order_item = new OrderItemModel
                                     {
-                                        item_id=item.id,
+                                        id=item.id,
                                         price=item.price,
                                         description = item.description,
                                         quantity = item_quantity
@@ -123,6 +122,21 @@ namespace MVC.Controllers
             Session["order_items"] = order_items;
 
             return View("Index");
+        }
+
+        [HttpGet]
+        public JsonResult GetProducts()
+        {
+            var items = new List<Item>()
+			{
+				new Item(){description = "Red Stapler",price = 50, id = 1},
+				new Item(){description = "TPS Report", price = 3, id = 2},
+				new Item(){description = "Printer", price = 400, id = 3},
+				new Item(){description = "Baseball bat", price = 80, id = 4},
+				new Item(){description = "Michael Bolton CD", price = 12, id = 5}
+			};
+
+            return Json(items, JsonRequestBehavior.AllowGet);
         }
     }
 }

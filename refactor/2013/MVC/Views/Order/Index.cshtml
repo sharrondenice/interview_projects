@@ -6,10 +6,12 @@
 <html>
 <head>
     <link href="../../Content/yellowing/style.css" rel="stylesheet" type="text/css" />
-
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+    <script src="../../Scripts/angular-cookies.min.js"></script>
+    <script src="../../Scripts/app.cart.js"></script>
     <title>Index</title>
 </head>
-<body>
+<body ng-app="ShoppingCart">
     <div id="wrapper">
 	    <div id="header">
 		    <div id="logo">
@@ -28,61 +30,69 @@
 					    </ul>
 				    </div>
 
-				    <div id="content">
+				    <div id="content" ng-controller="CartController" data-ng-init="GetProducts()">
                         <div>
                             <h1>Items available to purchase</h1>
                             <table width="100%">
                                 <tr>
-                                    <th align="left">Description</th>
-                                    <th align="left">Price</th>
-                                    <th align="left">Quantity</th>
+                                    <th align="left" ng-repeat="header in ProductHeaders">
+                                        {{header}}
+                                    </th>
                                 </tr>
-
-                                @{foreach (var item in (IList<Item>)ViewData["items"]){
-                                    <form action="@Url.Action("AddToOrder","Order")" method="POST">
-                                        <input type="hidden" id="@("item_id_" + item.id)" name="@("item_id_" + item.id)" value="@item.id"/>
-                                        <tr>
-                                            <td>@item.description</td>
-                                            <td>@String.Format("{0:C}",item.price)</td>
-                                            <td><input type="text" id="@("item_quantity_" + @item.id)" name="@("item_quantity_" + @item.id)" style="width: 50px;" value="1" /></td>
-                                            <td><input type="submit" value="Add to order"/></td>
-                                        </tr>
-                                    </form>
-                                    }
-                                }
+                                <tr ng-repeat="(index, product) in Products">
+                                	<td >{{product.description}}</td>
+                                	<td >{{product.price | currency:"$":2}}</td>
+                                	<td ><input type="text" ng-model="Products[index].quantity" ng-init="Products[index].quantity=1" style="width: 50px;"/></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3"></td>
+                                </tr>
+								<tr>
+                                    <td></td>
+                                    <td></td>
+									<td><input type="submit" value="Add to Order" ng-click="AddProducts()"/></td>
+								</tr>
                             </table>
                         </div>
 
                         <p></p>
 
-                        @if (((IList<OrderItemModel>)Session["order_items"]).Count > 0)
-                        {
-                            <div>
-                                <h1>Items to Order</h1>
-                                <form action="@Url.Action("Save", "Order")" method="POST">
-                                    <table width="100%">
-                                        <tr>
-                                            <th align="left">Item</th>
-                                            <th align="left">Quantity</th>
-                                            <th align="left">Price</th>
-                                            <th align="left">Total</th>
-                                        </tr>                            
-
-                                        @foreach (var order_item in (IList<OrderItemModel>)Session["order_items"])
-                                        {
-                                            <tr>
-                                                <td>@order_item.description</td>
-                                                <td>@order_item.quantity</td>
-                                                <td>@String.Format("{0:C}",order_item.price)</td>
-                                                <td>@String.Format("{0:C}",order_item.price * order_item.quantity)</td>
-                                            </tr>                                    
-                                        }
-                                    </table>
-
-                                    <input type="submit" value="Submit order" />
-                                </form>
+                            <div ng-show="CartEmpty == false">
+                               <h1>Items to Order</h1>
+                                <table width="100%">
+                                    <tr>
+                                        <th align="left" ng-repeat="header in CartHeaders">
+                                            {{header}}
+                                        </th>
+                                    </tr>
+                                    <tr ng-repeat="item in CartItems">
+                                	    <td >{{item.description}}</td>
+                                	    <td >{{item.price | currency:"$":2}}</td>
+                                	    <td >{{item.quantity}}</td>
+                                	    <td >{{item.total | currency:"$":2}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4"></td>
+                                    </tr>
+								    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+									    <td style="border-top: 1px solid #CCC; padding: 10px 0px;">{{CartTotal | currency:"$":2}} <strong>Total</strong></td>
+								    </tr>
+								    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+									    <td><button ng-click="CheckOut()">Check Out</button> <button ng-click="EmptyCart()">Empty Cart</button></td>
+								    </tr>
+                                </table>
                             </div>
-                        }
+
+                            <div ng-show="OrderComplete == true">
+                                Thank you for your order and email has been sent with details of your order.         
+                                Your order number is {{OrderID}}
+                            </div>
                     </div>
                 </div>
             </div>

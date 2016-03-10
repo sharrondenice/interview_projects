@@ -37,7 +37,7 @@
                                 {
                                     <tr>
                                         <td>@order.id</td>
-                                        <td>@order.items.Count</td>
+                                        <td>@String.Format("{0}",order.items.Sum(x=>x.quantity))</td>
                                         <td>@String.Format("{0:C}",order.items.Sum(x=>x.quantity * x.price))</td>
                                     </tr>
                                 }
