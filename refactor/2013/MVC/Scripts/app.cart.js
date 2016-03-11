@@ -10,7 +10,7 @@ app.controller("CartController", function ($scope, $http, $cookies) {
     $scope.ProductHeaders = ["Description", "Price", "Quantity"];
 	$scope.CartHeaders = ["Description", "Price", "Total"];
 
-	$scope.Products = $cookies.get("Products") ? JSON.parse($cookies.get("Products")) : $cookies.get("Products");
+	$scope.Products = [];
 	$scope.CartItems = $cookies.get("CartItems") ? JSON.parse($cookies.get("CartItems")) : $cookies.get("CartItems");
 
 	$scope.CartEmpty = true;
@@ -30,37 +30,29 @@ app.controller("CartController", function ($scope, $http, $cookies) {
 	    if (DEBUG)
 	        console.log("Get Products...");
 
-	    if (typeof $scope.Products == 'undefined') {
-	        $scope.Loading = true;
-	        $("body").css("cursor", "progress");
+	    $scope.Loading = true;
+	    $("body").css("cursor", "progress");
 
-	        $http.get('/Order/GetProducts')
-                .success(function (data, status, headers, config) {
-                    if (DEBUG)
-                        console.log(data);
+	    $http.get('/Order/GetProducts')
+            .success(function (data, status, headers, config) {
+                if (DEBUG)
+                    console.log(data);
 
-                    if (typeof data != 'undefined') {
-                        $scope.Products = data;
-                        $cookies.put('Products', JSON.stringify($scope.Products));
-                    }
-                })
-                .catch(function (data, status, header, config) {
-                    $scope.Error = true;
-                    $scope.ErrorNo = 100;
+                if (typeof data != 'undefined') {
+                    $scope.Products = data;
+                }
+            })
+            .catch(function (data, status, header, config) {
+                $scope.Error = true;
+                $scope.ErrorNo = 100;
 
-                    if (DEBUG)
-                        console.log("Error: " + data);
-                })
-	            .finally(function (data, status, header, config) {
-	                $scope.Loading = false;
-	                $("body").css("cursor", "default");
-	            });
-        }
-	    else
-	    {
-	        if (DEBUG)
-	            console.log("Cookies: " + JSON.stringify($scope.Products));
-	    }
+                if (DEBUG)
+                    console.log("Error: " + data);
+            })
+            .finally(function (data, status, header, config) {
+                $scope.Loading = false;
+                $("body").css("cursor", "default");
+            });
 	};
 
     // Add products to cart after button pressed

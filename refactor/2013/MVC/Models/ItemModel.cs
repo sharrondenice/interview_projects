@@ -12,13 +12,13 @@ namespace MVC.Models
     {
         public long id { get; set; }
         public string description { get; set; }
-        public decimal price { get; set; }
+        public double price { get; set; }
     }
 
 	/// <summary>
 	/// Item.
 	/// </summary>
-    public class Item
+    public abstract class Item
     {
 		/// <summary>
 		/// Loads the items.
@@ -26,43 +26,49 @@ namespace MVC.Models
 		/// <returns>The items.</returns>
         public static List<ItemModel> LoadItems()
         {
-            List<ItemModel> _itemList = new List<ItemModel>();
+            List<ItemModel> itemList = new List<ItemModel>();
 
-            _itemList.Add(new ItemModel
+            itemList.Add(new ItemModel
             {
                 description = "Red Stapler",
                 price = 50,
                 id = 1,
 
             });
-            _itemList.Add(new ItemModel
+            itemList.Add(new ItemModel
             {
                 description = "TPS Report",
                 price = 3,
                 id = 2,
 
             });
-            _itemList.Add(new ItemModel
+            itemList.Add(new ItemModel
             {
                 description = "Printer",
                 price = 400,
                 id = 3,
             });
-            _itemList.Add(new ItemModel
+            itemList.Add(new ItemModel
             {
                 description = "Baseball bat",
                 price = 80,
                 id = 4,
 
             });
-            _itemList.Add(new ItemModel
+            itemList.Add(new ItemModel
             {
                 description = "Michael Bolton CD",
                 price = 12,
                 id = 5,
             });
+            itemList.Add(new ItemModel
+            {
+                description = "Jump to Conclusions Mat",
+                price = 0.01,
+                id = 6,
+            });
 
-            return _itemList;
+            return itemList;
         }
     }
 }
